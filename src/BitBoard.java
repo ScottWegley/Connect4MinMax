@@ -40,4 +40,8 @@ class BitBoard {
         out = out + "0 1 2 3 4 5 6\n";
         return out;
     }
+
+    public String boardViewFromLong(){
+        return BitBoard.boardViewFromLong(this._bb);
+    }
 }
