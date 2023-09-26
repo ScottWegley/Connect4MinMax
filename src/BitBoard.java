@@ -7,6 +7,14 @@ class BitBoard {
     private long[] _bb = { 0, 0 };
     private int[] _height = { 0, 7, 14, 21, 28, 35, 42 };
 
+    BitBoard() {
+    }
+
+    public static void main(String[] args) {
+        System.out.print(boardViewFromLong(
+                new long[] { 0b0000010_0000011_0000000_0000000_0000000, 0b0000001_0000100_0000001_0000000_0000000 }));
+    }
+
     public static void printLong(long l) {
         System.out.println(Long.toBinaryString(l));
     }
