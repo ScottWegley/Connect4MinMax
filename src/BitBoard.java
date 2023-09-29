@@ -112,6 +112,25 @@ class BitBoard {
     }
 
     /**
+     * Returns an array of integers that represents the playable moves for this
+     * BitBoard.
+     * 
+     * @return An array of integers, where every column that needs to be skipped is
+     *         -1.
+     */
+    public int[] listMoves() {
+        int[] moves = new int[7];
+        long OVERFLOW = 0b10000000_10000000_10000000_10000000_10000000_10000000_10000000L;
+        for (int i = 0; i < moves.length; i++) {
+            moves[i] = -1;
+            if ((OVERFLOW & (1L << _height[i])) == 0) {
+                moves[i] = i;
+            }
+        }
+        return moves;
+    }
+
+    /**
      * Function to generate a CLI View of the Board.
      * 
      * @return A String with the CLI View of the Connect 4 Board.
