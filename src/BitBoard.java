@@ -111,12 +111,19 @@ class BitBoard {
         return BitBoard.isWin(_bb[0]) | BitBoard.isWin(_bb[1]);
     }
 
+    /**
+     * Function to generate a CLI View of the Board.
+     * 
+     * @return A String with the CLI View of the Connect 4 Board.
+     */
+    public String boardViewFromLong() {
+        String out = "";
         for (int i = 5; i >= 0; i--) {
             for (int j = 0; j < 7; j++) {
                 char c = '.';
-                if (((bb[0] >> (i + j * 7)) & 0x1) == 1) {
+                if (((_bb[X_PLAYER_NUM] >> (i + j * 7)) & 0x1) == 1) {
                     c = 'X';
-                } else if (((bb[1] >> (i + j * 7)) & 0x1) == 1) {
+                } else if (((_bb[O_PLAYER_NUM] >> (i + j * 7)) & 0x1) == 1) {
                     c = 'O';
                 }
                 out = out + c + " ";
@@ -125,7 +132,7 @@ class BitBoard {
         }
 
         out = out + "-------------\n";
-        out = out + "0 1 2 3 4 5 6\n";
+        out = out + "0 1 2 3 4 5 6";
         return out;
     }
 
