@@ -165,5 +165,17 @@ class BitBoard {
         _bb[--_counter & 1] ^= (1L << --_height[_moves[_counter]]);
     }
 
+    @Override
+    public String toString() {
+        String s = "";
+        s = s + boardViewFromLong() + "\n";
+        s = s + "Player 0: " + (X_PLAYER_NUM == 0 ? "X" : "O") + " || Player 1: " + (O_PLAYER_NUM == 1 ? "O" : "X");
+        s = s + "\n";
+        if (isWin()) {
+            s = s + "Victory for " + (!currentTurn() ? "Player 0" : "Player 1");
+        } else {
+            s = s + "Current Turn: " + (currentTurn() ? "Player 0" : "Player 1");
+        }
+        return s;
     }
 }
