@@ -136,7 +136,34 @@ class BitBoard {
         return out;
     }
 
-    public String boardViewFromLong(){
-        return BitBoard.boardViewFromLong(this._bb);
+    /**
+     * Makes a move in our BitBoard. Notably, does not need to know whose turn it
+     * is.
+     * We calculate that with {@link #_counter our counter} & 1, which returns 0 if
+     * odd, 1 if
+     * even.
+     * We then get the location of the next move that can be played for the
+     * specified
+     * column c and increment that location so the next move is correct. We move our
+     * 1, representing the new token, to that location, and combine it with our
+     * BitBoard.
+     * 
+     * @param c The specified column to add a token to.
+     */
+    public void makeMove(int c) {
+        this._bb[_counter & 1] ^= (1L << _height[c]++);
+        _moves[_counter++] = c;
+    }
+
+    /**
+     * This is pretty much the inverse of {@link #makeMove()}.
+     * Get the last move made, find the last token in that column,
+     * move a one into that position, and exclusive or it to get rid
+     * of the token in that position.
+     */
+    void undoMove() {
+        _bb[--_counter & 1] ^= (1L << --_height[_moves[_counter]]);
+    }
+
     }
 }
