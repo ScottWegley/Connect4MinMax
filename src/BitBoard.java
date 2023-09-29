@@ -1,6 +1,8 @@
+package src;
+
 /*
  * This file was written as I read through https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md,
- * a very helpful explanation of 
+ * a very helpful explanation of how to store a Connect4 game state in a long
  */
 
 class BitBoard {
@@ -44,6 +46,14 @@ class BitBoard {
             O_PLAYER_NUM = 1;
         }
     }
+
+    BitBoard(BitBoard bb) {
+        this(bb.getXNum(), bb.getONum());
+        for (int move : getMoves()) {
+            bb.makeMove(move);
+        }
+    }
+
     public int getXNum() {
         return X_PLAYER_NUM;
     }
@@ -57,8 +67,12 @@ class BitBoard {
     }
 
     public static void main(String[] args) {
-        System.out.print(boardViewFromLong(
-                new long[] { 0b0000010_0000011_0000000_0000000_0000000, 0b0000001_0000100_0000001_0000000_0000000 }));
+        BitBoard bb = new BitBoard();
+        int[] moves = { 0, 0, 1, 0, 2, 0, 6 };
+        for (int i : moves) {
+            bb.makeMove(i);
+        }
+        System.out.println(bb);
     }
 
     /**
