@@ -89,7 +89,27 @@ class BitBoard {
         return this._bb[1];
     }
 
-        String out = "";
+    /**
+     * @param bitboard The long to check for a win.
+     * @return True if the bitboard contains a win.
+     */
+    public static boolean isWin(long bitboard) {
+        int[] directions = { 1, 7, 6, 8 };
+        long bb;
+        for (int i : directions) {
+            bb = bitboard & (bitboard >> i);
+            if ((bb & (bb >> (2 * i))) != 0)
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return True is a player has won, false if no one has won.
+     */
+    public boolean isWin() {
+        return BitBoard.isWin(_bb[0]) | BitBoard.isWin(_bb[1]);
+    }
 
         for (int i = 5; i >= 0; i--) {
             for (int j = 0; j < 7; j++) {
