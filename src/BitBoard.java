@@ -44,6 +44,16 @@ class BitBoard {
             O_PLAYER_NUM = 1;
         }
     }
+    public int getXNum() {
+        return X_PLAYER_NUM;
+    }
+
+    public int getONum() {
+        return O_PLAYER_NUM;
+    }
+
+    public int[] getMoves() {
+        return _moves;
     }
 
     public static void main(String[] args) {
@@ -51,11 +61,33 @@ class BitBoard {
                 new long[] { 0b0000010_0000011_0000000_0000000_0000000, 0b0000001_0000100_0000001_0000000_0000000 }));
     }
 
-    public static void printLong(long l) {
-        System.out.println(Long.toBinaryString(l));
+    /**
+     * @return True if it is Player 0's turn, False if it is Player 1's turn.
+     */
+    public boolean currentTurn() {
+        return (_counter & 1) == 0;
     }
 
-    public static String boardViewFromLong(long[] bb) {
+    /**
+     * @return How many moves have been played so far.
+     */
+    public int getTurnCount() {
+        return _counter;
+    }
+
+    /**
+     * @return The long representing Player 0.
+     */
+    public long getPlayer0Board() {
+        return this._bb[0];
+    }
+
+    /**
+     * @return The long representing plauer 2.
+     */
+    public long getPlayer1Board() {
+        return this._bb[1];
+    }
 
         String out = "";
 
