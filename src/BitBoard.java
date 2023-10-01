@@ -6,6 +6,19 @@ package src;
  * described in http://blog.gamesolver.org/solving-connect-four/03-minmax/.
  */
 
+/**
+ * This class represents a game of Connect 4. The board itself is stored in a
+ * {@link #_bb Bit Board}, hence the name. This class contains a number of
+ * functions
+ * to determine things about the game state ({@link #isVictory() has someone won},
+ * {@link #listMoves() what moves can be played}, {@link #currentTurn() whose
+ * turn it is},
+ * {@link #isWinningMove(int) will this move win the game}, etc.). It also has
+ * functions
+ * to manipulate the board ({@link #makeMove(int) making a move} or
+ * {@link #undoMove() undoing
+ * a move}.)
+ */
 class BitBoard {
 
     // #region Attributes
@@ -127,21 +140,24 @@ class BitBoard {
     /**
      * @return True is a player has won, false if no one has won.
      */
-    public boolean isOver() {
+    public boolean isVictory() {
         return BitBoard.isWin(_bb[0]) | BitBoard.isWin(_bb[1]);
     }
 
     /**
-     * Evalues if a certain move would win the game for the {@link #currentTurn() current player}.
+     * Evalues if a certain move would win the game for the {@link #currentTurn()
+     * current player}.
+     * 
      * @param col The move to evalue.
-     * @return True if the specified move would win the game for the {@link #currentTurn() current player}.
+     * @return True if the specified move would win the game for the
+     *         {@link #currentTurn() current player}.
      */
     public boolean isWinningMove(int col) {
-        if(col < 0 || col > 6){
+        if (col < 0 || col > 6) {
             return false;
         }
         int[] moves = listMoves();
-        if(moves[col] == -1){
+        if (moves[col] == -1) {
             return false;
         }
         makeMove(col);
@@ -254,7 +270,7 @@ class BitBoard {
         s = s + boardViewFromLong() + "\n";
         s = s + "Player 0: " + (X_PLAYER_NUM == 0 ? "X" : "O") + " || Player 1: " + (O_PLAYER_NUM == 1 ? "O" : "X");
         s = s + "\n";
-        if (isOver()) {
+        if (isVictory()) {
             s = s + "Victory for " + (!currentTurn() ? "Player 0" : "Player 1");
         } else {
             s = s + "Current Turn: " + (currentTurn() ? "Player 0" : "Player 1");
