@@ -10,7 +10,8 @@ package src;
  * This class represents a game of Connect 4. The board itself is stored in a
  * {@link #_bb Bit Board}, hence the name. This class contains a number of
  * functions
- * to determine things about the game state ({@link #isVictory() has someone won},
+ * to determine things about the game state ({@link #isVictory() has someone
+ * won},
  * {@link #listMoves() what moves can be played}, {@link #currentTurn() whose
  * turn it is},
  * {@link #isWinningMove(int) will this move win the game}, etc.). It also has
@@ -36,8 +37,8 @@ class BitBoard {
     private final int[] _height = { 0, 7, 14, 21, 28, 35, 42 };
 
     /**
-     * Keeps track of how many moves have been made. When it is even, it's player
-     * 1's turn, odd is Player 1.
+     * Keeps track of how many moves have been made. When it is even, it's Player
+     * 0's turn, odd is Player 1.
      */
     private int _counter = 0;
 
@@ -142,6 +143,13 @@ class BitBoard {
      */
     public boolean isVictory() {
         return BitBoard.isWin(_bb[0]) | BitBoard.isWin(_bb[1]);
+    }
+
+    /**
+     * @return True if there is a draw, false is there is not a draw.
+     */
+    public boolean isDraw() {
+        return (_counter == _moves.length && !isVictory());
     }
 
     /**
@@ -270,10 +278,16 @@ class BitBoard {
         s = s + boardViewFromLong() + "\n";
         s = s + "Player 0: " + (X_PLAYER_NUM == 0 ? "X" : "O") + " || Player 1: " + (O_PLAYER_NUM == 1 ? "O" : "X");
         s = s + "\n";
-        if (isVictory()) {
-            s = s + "Victory for " + (!currentTurn() ? "Player 0" : "Player 1");
+        if (!isDraw()) {
+            if (isVictory()) {
+                s = s + "Victory for " + (!currentTurn() ? "Player 0 (" + (X_PLAYER_NUM == 0 ? "X" : "O") + ")"
+                        : "Player 1 (" + (O_PLAYER_NUM == 1 ? "O" : "X") + ")");
+            } else {
+                s = s + "Current Turn: " + (currentTurn() ? "Player 0 (" + (X_PLAYER_NUM == 0 ? "X" : "O") + ")"
+                        : "Player 1 (" + (O_PLAYER_NUM == 1 ? "O" : "X") + ")");
+            }
         } else {
-            s = s + "Current Turn: " + (currentTurn() ? "Player 0" : "Player 1");
+            s = s + "Game is Drawn!";
         }
         return s;
     }
