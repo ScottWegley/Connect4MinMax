@@ -145,7 +145,7 @@ class BitBoard {
             return false;
         }
         makeMove(col);
-        long toCheck = (currentTurn() ? getPlayer0Board() : getPlayer1Board());
+        long toCheck = (currentTurn() ? getPlayer1Board() : getPlayer0Board());
         undoMove();
         return BitBoard.isWin(toCheck);
     }
