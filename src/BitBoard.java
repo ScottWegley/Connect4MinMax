@@ -7,6 +7,7 @@ package src;
  */
 
 class BitBoard {
+
     /**
      * This is an array of two longs. The first when read in binary stores the
      * positions of Player 0, the second of Player 1.
@@ -34,10 +35,31 @@ class BitBoard {
      */
     private final int[] _moves = new int[42];
 
+    public static void main(String[] args) {
+        BitBoard bb = new BitBoard();
+        int[] moves = { 0, 0, 1, 0, 2, 0, 6 };
+        for (int i : moves) {
+            bb.makeMove(i);
+        }
+        System.out.println(bb);
+    }
+
+    /**
+     * Empty constructor for a {@link BitBoard}.
+     * Calls {@link #BitBoard(int, int)} with values 0, 1
+     */
     BitBoard() {
         this(0, 1);
     }
 
+    /**
+     * Creates a new {@link BitBoard} with specified player numbers.
+     * 
+     * @param xNum The number representing the X Player, only 0 or 1, must differ
+     *             from oNum.
+     * @param oNum The number representing the O Player, only 0 or 1, must differ
+     *             from xNum.
+     */
     BitBoard(int xNum, int oNum) {
         if ((xNum == 0 || xNum == 1) && (oNum == 0 || oNum == 1) && xNum != oNum) {
             X_PLAYER_NUM = xNum;
@@ -48,6 +70,10 @@ class BitBoard {
         }
     }
 
+    /**
+     * Copy Constructor for {@link BitBoard}.
+     * @param bb The BitBoard to copy the values from.
+     */
     BitBoard(BitBoard bb) {
         this(bb.getXNum(), bb.getONum());
         for (int move : getMoves()) {
@@ -55,25 +81,25 @@ class BitBoard {
         }
     }
 
+    /**
+     * @return The index of the X Player in {@link #_bb the BitBoard array}.
+     */
     public int getXNum() {
         return X_PLAYER_NUM;
     }
 
+    /**
+     * @return The index of the O Player in {@link #_bb the BitBoard array}.
+     */
     public int getONum() {
         return O_PLAYER_NUM;
     }
 
+    /**
+     * @return An array of all the {@link #_moves moves} made so far.
+     */
     public int[] getMoves() {
         return _moves;
-    }
-
-    public static void main(String[] args) {
-        BitBoard bb = new BitBoard();
-        int[] moves = { 0, 0, 1, 0, 2, 0, 6 };
-        for (int i : moves) {
-            bb.makeMove(i);
-        }
-        System.out.println(bb);
     }
 
     /**
