@@ -8,7 +8,7 @@ package src;
 
 class BitBoard {
 
-    //#region Attributes
+    // #region Attributes
 
     /**
      * This is an array of two longs. The first when read in binary stores the
@@ -36,9 +36,9 @@ class BitBoard {
      * only 42 positions, so we only need to store 42 moves.
      */
     private final int[] _moves = new int[42];
-    //#endregion
+    // #endregion
 
-    //#region Getters
+    // #region Getters
     /**
      * @return The index of the X Player in {@link #_bb the BitBoard array}.
      */
@@ -80,9 +80,9 @@ class BitBoard {
     public long getPlayer1Board() {
         return this._bb[1];
     }
-    //#endregion
+    // #endregion
 
-    //#region Reporters
+    // #region Reporters
     /**
      * Returns an array of integers that represents the playable moves for this
      * BitBoard.
@@ -92,7 +92,7 @@ class BitBoard {
      */
     public int[] listMoves() {
         int[] moves = new int[7];
-        long OVERFLOW = 0b10000000_10000000_10000000_10000000_10000000_10000000_10000000L;
+        long OVERFLOW = 0b1000000_1000000_1000000_1000000_1000000_1000000_1000000L;
         for (int i = 0; i < moves.length; i++) {
             moves[i] = -1;
             if ((OVERFLOW & (1L << _height[i])) == 0) {
@@ -127,12 +127,31 @@ class BitBoard {
     /**
      * @return True is a player has won, false if no one has won.
      */
-    public boolean isWin() {
+    public boolean isOver() {
         return BitBoard.isWin(_bb[0]) | BitBoard.isWin(_bb[1]);
     }
-    //#endregion
 
-    //#region Modifiers
+    /**
+     * Evalues if a certain move would win the game for the {@link #currentTurn() current player}.
+     * @param col The move to evalue.
+     * @return True if the specified move would win the game for the {@link #currentTurn() current player}.
+     */
+    public boolean isWinningMove(int col) {
+        if(col < 0 || col > 6){
+            return false;
+        }
+        int[] moves = listMoves();
+        if(moves[col] == -1){
+            return false;
+        }
+        makeMove(col);
+        long toCheck = (currentTurn() ? getPlayer0Board() : getPlayer1Board());
+        undoMove();
+        return BitBoard.isWin(toCheck);
+    }
+    // #endregion
+
+    // #region Modifiers
     /**
      * Makes a move in our BitBoard. Notably, does not need to know whose turn it
      * is.
@@ -161,9 +180,9 @@ class BitBoard {
     void undoMove() {
         _bb[--_counter & 1] ^= (1L << --_height[_moves[_counter]]);
     }
-    //#endregion
+    // #endregion
 
-    //#region Constructors
+    // #region Constructors
     /**
      * Empty constructor for a {@link BitBoard}.
      * Calls {@link #BitBoard(int, int)} with values 0, 1
@@ -201,9 +220,9 @@ class BitBoard {
             bb.makeMove(move);
         }
     }
-    //#endregion
+    // #endregion
 
-    //#region OOP Functions
+    // #region OOP Functions
     /**
      * Function to generate a CLI View of the Board.
      * 
@@ -235,12 +254,12 @@ class BitBoard {
         s = s + boardViewFromLong() + "\n";
         s = s + "Player 0: " + (X_PLAYER_NUM == 0 ? "X" : "O") + " || Player 1: " + (O_PLAYER_NUM == 1 ? "O" : "X");
         s = s + "\n";
-        if (isWin()) {
+        if (isOver()) {
             s = s + "Victory for " + (!currentTurn() ? "Player 0" : "Player 1");
         } else {
             s = s + "Current Turn: " + (currentTurn() ? "Player 0" : "Player 1");
         }
         return s;
     }
-    //#endregion
+    // #endregion
 }
