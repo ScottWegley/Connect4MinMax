@@ -8,6 +8,8 @@ package src;
 
 class BitBoard {
 
+    //#region Attributes
+
     /**
      * This is an array of two longs. The first when read in binary stores the
      * positions of Player 0, the second of Player 1.
@@ -34,53 +36,9 @@ class BitBoard {
      * only 42 positions, so we only need to store 42 moves.
      */
     private final int[] _moves = new int[42];
+    //#endregion
 
-    public static void main(String[] args) {
-        BitBoard bb = new BitBoard();
-        int[] moves = { 0, 0, 1, 0, 2, 0, 6 };
-        for (int i : moves) {
-            bb.makeMove(i);
-        }
-        System.out.println(bb);
-    }
-
-    /**
-     * Empty constructor for a {@link BitBoard}.
-     * Calls {@link #BitBoard(int, int)} with values 0, 1
-     */
-    BitBoard() {
-        this(0, 1);
-    }
-
-    /**
-     * Creates a new {@link BitBoard} with specified player numbers.
-     * 
-     * @param xNum The number representing the X Player, only 0 or 1, must differ
-     *             from oNum.
-     * @param oNum The number representing the O Player, only 0 or 1, must differ
-     *             from xNum.
-     */
-    BitBoard(int xNum, int oNum) {
-        if ((xNum == 0 || xNum == 1) && (oNum == 0 || oNum == 1) && xNum != oNum) {
-            X_PLAYER_NUM = xNum;
-            O_PLAYER_NUM = oNum;
-        } else {
-            X_PLAYER_NUM = 0;
-            O_PLAYER_NUM = 1;
-        }
-    }
-
-    /**
-     * Copy Constructor for {@link BitBoard}.
-     * @param bb The BitBoard to copy the values from.
-     */
-    BitBoard(BitBoard bb) {
-        this(bb.getXNum(), bb.getONum());
-        for (int move : getMoves()) {
-            bb.makeMove(move);
-        }
-    }
-
+    //#region Getters
     /**
      * @return The index of the X Player in {@link #_bb the BitBoard array}.
      */
@@ -103,13 +61,6 @@ class BitBoard {
     }
 
     /**
-     * @return True if it is Player 0's turn, False if it is Player 1's turn.
-     */
-    public boolean currentTurn() {
-        return (_counter & 1) == 0;
-    }
-
-    /**
      * @return How many moves have been played so far.
      */
     public int getTurnCount() {
@@ -128,6 +79,34 @@ class BitBoard {
      */
     public long getPlayer1Board() {
         return this._bb[1];
+    }
+    //#endregion
+
+    //#region Reporters
+    /**
+     * Returns an array of integers that represents the playable moves for this
+     * BitBoard.
+     * 
+     * @return An array of integers, where every column that needs to be skipped is
+     *         -1.
+     */
+    public int[] listMoves() {
+        int[] moves = new int[7];
+        long OVERFLOW = 0b10000000_10000000_10000000_10000000_10000000_10000000_10000000L;
+        for (int i = 0; i < moves.length; i++) {
+            moves[i] = -1;
+            if ((OVERFLOW & (1L << _height[i])) == 0) {
+                moves[i] = i;
+            }
+        }
+        return moves;
+    }
+
+    /**
+     * @return True if it is Player 0's turn, False if it is Player 1's turn.
+     */
+    public boolean currentTurn() {
+        return (_counter & 1) == 0;
     }
 
     /**
@@ -151,51 +130,9 @@ class BitBoard {
     public boolean isWin() {
         return BitBoard.isWin(_bb[0]) | BitBoard.isWin(_bb[1]);
     }
+    //#endregion
 
-    /**
-     * Returns an array of integers that represents the playable moves for this
-     * BitBoard.
-     * 
-     * @return An array of integers, where every column that needs to be skipped is
-     *         -1.
-     */
-    public int[] listMoves() {
-        int[] moves = new int[7];
-        long OVERFLOW = 0b10000000_10000000_10000000_10000000_10000000_10000000_10000000L;
-        for (int i = 0; i < moves.length; i++) {
-            moves[i] = -1;
-            if ((OVERFLOW & (1L << _height[i])) == 0) {
-                moves[i] = i;
-            }
-        }
-        return moves;
-    }
-
-    /**
-     * Function to generate a CLI View of the Board.
-     * 
-     * @return A String with the CLI View of the Connect 4 Board.
-     */
-    public String boardViewFromLong() {
-        String out = "";
-        for (int i = 5; i >= 0; i--) {
-            for (int j = 0; j < 7; j++) {
-                char c = '.';
-                if (((_bb[X_PLAYER_NUM] >> (i + j * 7)) & 0x1) == 1) {
-                    c = 'X';
-                } else if (((_bb[O_PLAYER_NUM] >> (i + j * 7)) & 0x1) == 1) {
-                    c = 'O';
-                }
-                out = out + c + " ";
-            }
-            out = out + '\n';
-        }
-
-        out = out + "-------------\n";
-        out = out + "0 1 2 3 4 5 6";
-        return out;
-    }
-
+    //#region Modifiers
     /**
      * Makes a move in our BitBoard. Notably, does not need to know whose turn it
      * is.
@@ -224,6 +161,73 @@ class BitBoard {
     void undoMove() {
         _bb[--_counter & 1] ^= (1L << --_height[_moves[_counter]]);
     }
+    //#endregion
+
+    //#region Constructors
+    /**
+     * Empty constructor for a {@link BitBoard}.
+     * Calls {@link #BitBoard(int, int)} with values 0, 1
+     */
+    BitBoard() {
+        this(0, 1);
+    }
+
+    /**
+     * Creates a new {@link BitBoard} with specified player numbers.
+     * 
+     * @param xNum The number representing the X Player, only 0 or 1, must differ
+     *             from oNum.
+     * @param oNum The number representing the O Player, only 0 or 1, must differ
+     *             from xNum.
+     */
+    BitBoard(int xNum, int oNum) {
+        if ((xNum == 0 || xNum == 1) && (oNum == 0 || oNum == 1) && xNum != oNum) {
+            X_PLAYER_NUM = xNum;
+            O_PLAYER_NUM = oNum;
+        } else {
+            X_PLAYER_NUM = 0;
+            O_PLAYER_NUM = 1;
+        }
+    }
+
+    /**
+     * Copy Constructor for {@link BitBoard}.
+     * 
+     * @param bb The BitBoard to copy the values from.
+     */
+    BitBoard(BitBoard bb) {
+        this(bb.getXNum(), bb.getONum());
+        for (int move : getMoves()) {
+            bb.makeMove(move);
+        }
+    }
+    //#endregion
+
+    //#region OOP Functions
+    /**
+     * Function to generate a CLI View of the Board.
+     * 
+     * @return A String with the CLI View of the Connect 4 Board.
+     */
+    public String boardViewFromLong() {
+        String out = "";
+        for (int i = 5; i >= 0; i--) {
+            for (int j = 0; j < 7; j++) {
+                char c = '.';
+                if (((_bb[X_PLAYER_NUM] >> (i + j * 7)) & 0x1) == 1) {
+                    c = 'X';
+                } else if (((_bb[O_PLAYER_NUM] >> (i + j * 7)) & 0x1) == 1) {
+                    c = 'O';
+                }
+                out = out + c + " ";
+            }
+            out = out + '\n';
+        }
+
+        out = out + "-------------\n";
+        out = out + "0 1 2 3 4 5 6";
+        return out;
+    }
 
     @Override
     public String toString() {
@@ -238,4 +242,5 @@ class BitBoard {
         }
         return s;
     }
+    //#endregion
 }
