@@ -2,7 +2,8 @@ package src;
 
 /*
  * This file was written as I read through https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md,
- * a very helpful explanation of how to store a Connect4 game state in a long
+ * a very helpful explanation of how to store a Connect4 game state in a long.  It also implements some techniques
+ * described in http://blog.gamesolver.org/solving-connect-four/03-minmax/.
  */
 
 class BitBoard {
