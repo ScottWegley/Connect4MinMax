@@ -1,7 +1,7 @@
 package src;
 
 public class MainApp {
-    public static final int[] ONE_FROM_WIN = {0,6,3,6,2,1,2,4,3,1,2,2,3};
+    public static final int[] ONE_FROM_WIN = {0,6,3,6,2,1,2,4,3,1,2,2};
 
     public static void main(String[] args) {
         BitBoard bb = new BitBoard();
@@ -10,7 +10,7 @@ public class MainApp {
             bb.makeMove(i);
         }
         System.out.println(bb);
-        System.out.println(Solver.negamax(bb, -21, 21));
+        System.out.println(Solver.solve(bb));
     }
 
     public static void onlineToLocal(String input) {
