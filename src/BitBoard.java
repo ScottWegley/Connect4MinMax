@@ -149,7 +149,7 @@ class BitBoard {
      * @return True if there is a draw, false is there is not a draw.
      */
     public boolean isDraw() {
-        return (_counter == _moves.length && !isVictory());
+        return (_counter == 42);
     }
 
     /**
@@ -240,8 +240,8 @@ class BitBoard {
      */
     BitBoard(BitBoard bb) {
         this(bb.getXNum(), bb.getONum());
-        for (int move : getMoves()) {
-            bb.makeMove(move);
+        for (int i = 0; i < bb.getTurnCount(); i++) {
+            makeMove(bb.getMoves()[i]);
         }
     }
     // #endregion
