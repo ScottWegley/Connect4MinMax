@@ -47,6 +47,9 @@ public class Solver {
     }
 
     public static int solve(BitBoard bb) {
+        if(bb.getTurnCount() == 0){
+            return 1;
+        }
         int min = -(42 - bb.getTurnCount()) / 2;
         int max = (43 - bb.getTurnCount()) / 2;
 
