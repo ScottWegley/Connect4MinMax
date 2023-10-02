@@ -1,7 +1,7 @@
 package src;
 
 public class MainApp {
-    public static final int[] ONE_FROM_WIN = {3,3,3,3,3,1,1,1,1,6,1,3,1,6,2,2,4,5,4,4,5,5};
+    public static final int[] ONE_FROM_WIN = {0,6,3,6,2,1,2,4,3,1,2,2};
 
     public static void main(String[] args) {
         BitBoard bb = new BitBoard();
