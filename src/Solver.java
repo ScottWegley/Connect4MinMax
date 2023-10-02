@@ -45,4 +45,25 @@ public class Solver {
         posMap.put(bb.generateKey(), alpha + 19);
         return alpha;
     }
+
+    public static int solve(BitBoard bb) {
+        int min = -(42 - bb.getTurnCount()) / 2;
+        int max = (43 - bb.getTurnCount()) / 2;
+
+        while (min < max) {
+            int med = min + (max - min) / 2;
+            if (med <= 0 && min / 2 < med) {
+                med = min / 2;
+            } else if (max >= 0 && max / 2 > med) {
+                med = max / 2;
+            }
+            int r = negamax(bb, med, med + 1);
+            if (r <= med) {
+                max = r;
+            } else {
+                min = r;
+            }
+        }
+        return min;
+    }
 }
