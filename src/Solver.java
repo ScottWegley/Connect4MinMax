@@ -1,8 +1,12 @@
 package src;
 
+import java.util.HashMap;
+
 public class Solver {
 
     private static final int[] EXPLORE_ORDER = { 3, 2, 4, 1, 5, 0, 6 };
+
+    private static HashMap<Long, Integer> posMap = new HashMap<>();
 
     public static int negamax(BitBoard bb, int alpha, int beta) {
         if (bb.isDraw()) {
@@ -15,6 +19,10 @@ public class Solver {
         }
 
         int max = (41 - bb.getTurnCount()) / 2;
+        Integer val = posMap.get(bb.generateKey());
+        if (val != null) {
+            max = val - 19;
+        }
         if (beta > max) {
             beta = max;
             if (alpha >= beta) {
@@ -34,6 +42,7 @@ public class Solver {
                 }
             }
         }
+        posMap.put(bb.generateKey(), alpha + 19);
         return alpha;
     }
 }
