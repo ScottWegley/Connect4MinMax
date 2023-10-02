@@ -173,6 +173,13 @@ class BitBoard {
         undoMove();
         return BitBoard.isWin(toCheck);
     }
+
+     /**
+     * @return A unique key representing a game state.
+     */
+    public long generateKey(){
+        return (_bb[0] | _bb[1]) + (currentTurn() ? _bb[0] : _bb[1]);
+    }
     // #endregion
 
     // #region Modifiers
