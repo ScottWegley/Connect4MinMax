@@ -1,7 +1,7 @@
 package src;
 
 public class MainApp {
-    public static final int[] ONE_FROM_WIN = {0,6,3,6,2,1,2,4,3};
+    public static final int[] ONE_FROM_WIN = { 0, 6, 3, 6, 2, 1, 2, 2 };
 
     public static void main(String[] args) {
         BitBoard bb = new BitBoard();
@@ -9,10 +9,14 @@ public class MainApp {
         for (int i : moves) {
             bb.makeMove(i);
         }
-        System.out.println(bb);
         long startTime = System.currentTimeMillis();
-        System.out.println(Solver.solve(bb));
-        System.out.println(System.currentTimeMillis() - startTime);
+        int score = Solver.solve(bb);
+        startTime = System.currentTimeMillis() - startTime;
+        System.out.println(bb);
+        System.out.println(score);
+        System.out.println("Seconds Elapsed " + ((double) startTime) / 1000);
+        System.out.println("Table Size " + Solver.tableSize() + "  ||  "
+                + ((double) Solver.tableSize() / (double) Integer.MAX_VALUE) * 100 + "% Full");
     }
 
     public static void onlineToLocal(String input) {
