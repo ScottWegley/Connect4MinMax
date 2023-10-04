@@ -6,7 +6,13 @@ public class Solver {
 
     private static final int[] EXPLORE_ORDER = { 3, 2, 4, 1, 5, 0, 6 };
 
+    private static int CHECKED = 0;
+
     private static HashMap<Long, Integer> posMap = new HashMap<>();
+
+    public static int tableSize() {
+        return posMap.size();
+    }
 
     public static int negamax(BitBoard bb, int alpha, int beta) {
         if (bb.isDraw()) {
@@ -42,12 +48,15 @@ public class Solver {
                 }
             }
         }
+        if (++CHECKED % 100000 == 0) {
+            System.out.println(CHECKED + " Positions Explored");
+        }
         posMap.put(bb.generateKey(), alpha + 19);
         return alpha;
     }
 
     public static int solve(BitBoard bb) {
-        if(bb.getTurnCount() == 0){
+        if (bb.getTurnCount() == 0) {
             return 1;
         }
         int min = -(42 - bb.getTurnCount()) / 2;
