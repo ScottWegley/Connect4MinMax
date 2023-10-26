@@ -36,6 +36,10 @@ public class Solver {
             }
         }
 
+        // if(depth == 0){
+        //     return 0;
+        // }
+
         for (int i = 0; i < bb.listMoves().length; i++) {
             if (bb.listMoves()[EXPLORE_ORDER[i]] != -1) {
                 BitBoard b2 = new BitBoard(bb);
@@ -55,7 +59,61 @@ public class Solver {
         return alpha;
     }
 
-    public static int solve(BitBoard bb) {
+    public static int[] customSolve(BitBoard bb){
+        int[] output = new int[]{0,0,0,0,0,0,0};
+        if(bb.getTurnCount() < 4){  // Early in the game, the center is always best.
+            System.out.println("Early scoring case");
+            output[3] = 18;
+            return output;
+        }
+        for (int i = 0; i < bb.listMoves().length; i++) { // Make the winning move if it exists.
+            if(bb.listMoves()[i] != -1 && bb.isWinningMove(i)){
+                System.out.println("Winning move case");
+                output[i] = 18;
+                return output;
+            }
+        }
+        // Loop through all moves to avoid making the losing move.
+        for (int i = 0; i < bb.listMoves().length; i++) {
+            if(bb.listMoves()[i] != -1){ // If move is possible
+                bb.makeMove(i);
+                for (int j = 0; j < bb.listMoves().length; j++) {
+                    if(bb.listMoves()[j] != -1 ){
+                        if(bb.isWinningMove(j)){ // Check for opponent winning move, avoid.
+                            output[j] = -18;
+                        }
+                    }
+                }
+                if(bb.isDraw()){ // If this move is a draw neutral scoring.
+                    output[i] = 0;
+                }
+                bb.undoMove();
+            }
+        }
+        int WEIGHT_SCORE = 13;
+        for (int i : EXPLORE_ORDER) {
+            if(bb.listMoves()[i] != -1){
+                output[i] = WEIGHT_SCORE--;
+            }
+        }
+        if(bb.getTurnCount() > 13){
+            for (int i = 0; i < output.length; i++) {
+                if(output[i] == -18){
+                    continue;
+                }
+                if(bb.listMoves()[i] != -1){
+                    bb.makeMove(i);
+                    output[i] = -negamax(bb, -18, 18);
+                    bb.undoMove();
+                }
+            }
+        }
+        
+
+        return output;
+    }
+
+    public static int solve(BitBoard bb, int d) {
         if (bb.getTurnCount() == 0) {
             return 1;
         }
