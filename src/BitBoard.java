@@ -123,6 +123,14 @@ class BitBoard {
         return (_counter & 1) == 0;
     }
 
+    public void swapTurns(){
+        _counter++;
+    }
+
+    public void unswapTurns(){
+        _counter--;
+    }
+
     /**
      * @param bitboard The long to check for a win.
      * @return True if the bitboard contains a win.

@@ -5,9 +5,6 @@ import java.util.HashMap;
 public class Solver {
 
     private static final int[] EXPLORE_ORDER = { 3, 2, 4, 1, 5, 0, 6 };
-
-    private static int CHECKED = 0;
-
     private static HashMap<Long, Integer> posMap = new HashMap<>();
 
     public static int tableSize() {
@@ -17,11 +14,6 @@ public class Solver {
     public static int negamax(BitBoard bb, int alpha, int beta) {
         if (bb.isDraw()) {
             return 0;
-        }
-        for (int i = 0; i < bb.listMoves().length; i++) {
-            if (bb.listMoves()[EXPLORE_ORDER[i]] != -1 && bb.isWinningMove(EXPLORE_ORDER[i])) {
-                return (43 - bb.getTurnCount()) / 2;
-            }
         }
 
         int max = (41 - bb.getTurnCount()) / 2;
@@ -36,10 +28,6 @@ public class Solver {
             }
         }
 
-        // if(depth == 0){
-        //     return 0;
-        // }
-
         for (int i = 0; i < bb.listMoves().length; i++) {
             if (bb.listMoves()[EXPLORE_ORDER[i]] != -1) {
                 BitBoard b2 = new BitBoard(bb);
@@ -52,39 +40,35 @@ public class Solver {
                 }
             }
         }
-        if (++CHECKED % 100000 == 0) {
-            System.out.println(CHECKED + " Positions Explored");
-        }
+
         posMap.put(bb.generateKey(), alpha + 19);
         return alpha;
     }
 
-    public static int[] customSolve(BitBoard bb){
-        int[] output = new int[]{0,0,0,0,0,0,0};
-        if(bb.getTurnCount() < 4){  // Early in the game, the center is always best.
-            System.out.println("Early scoring case");
+    public static int[] customSolve(BitBoard bb) {
+        int[] output = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+        if (bb.getTurnCount() < 4) { // Early in the game, the center is always best.
             output[3] = 18;
             return output;
         }
         for (int i = 0; i < bb.listMoves().length; i++) { // Make the winning move if it exists.
-            if(bb.listMoves()[i] != -1 && bb.isWinningMove(i)){
-                System.out.println("Winning move case");
+            if (bb.listMoves()[i] != -1 && bb.isWinningMove(i)) {
                 output[i] = 18;
                 return output;
             }
         }
         // Loop through all moves to avoid making the losing move.
         for (int i = 0; i < bb.listMoves().length; i++) {
-            if(bb.listMoves()[i] != -1){ // If move is possible
+            if (bb.listMoves()[i] != -1) { // If move is possible
                 bb.makeMove(i);
                 for (int j = 0; j < bb.listMoves().length; j++) {
-                    if(bb.listMoves()[j] != -1 ){
-                        if(bb.isWinningMove(j)){ // Check for opponent winning move, avoid.
+                    if (bb.listMoves()[j] != -1) {
+                        if (bb.isWinningMove(j)) { // Check for opponent winning move, avoid.
                             output[j] = -18;
                         }
                     }
                 }
-                if(bb.isDraw()){ // If this move is a draw neutral scoring.
+                if (bb.isDraw()) { // If this move is a draw neutral scoring.
                     output[i] = 0;
                 }
                 bb.undoMove();
@@ -92,23 +76,22 @@ public class Solver {
         }
         int WEIGHT_SCORE = 13;
         for (int i : EXPLORE_ORDER) {
-            if(bb.listMoves()[i] != -1){
+            if (bb.listMoves()[i] != -1) {
                 output[i] = WEIGHT_SCORE--;
             }
         }
-        if(bb.getTurnCount() > 13){
+        if (bb.getTurnCount() > 13) {
             for (int i = 0; i < output.length; i++) {
-                if(output[i] == -18){
+                if (output[i] == -18) {
                     continue;
                 }
-                if(bb.listMoves()[i] != -1){
+                if (bb.listMoves()[i] != -1) {
                     bb.makeMove(i);
                     output[i] = -negamax(bb, -18, 18);
                     bb.undoMove();
                 }
             }
         }
-        
 
         return output;
     }
